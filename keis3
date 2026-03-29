@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Image Slider</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="swiper">
+    <div class="swiper-wrapper">
+        <div class="swiper-slide"><img src="images/image1.jpg" alt="Image 1"></div>
+        <div class="swiper-slide"><img src="images/image2.jpg" alt="Image 2"></div>
+        <div class="swiper-slide"><img src="images/image3.jpg" alt="Image 3"></div>
+        <div class="swiper-slide"><img src="images/image4.jpg" alt="Image 4"></div>
+        <div class="swiper-slide"><img src="images/image5.jpg" alt="Image 5"></div>
+    </div>
+    <!-- Navigation buttons -->
+    <div class="swiper-button-next"></div>
+    <div class="swiper-button-prev"></div>
+    <!-- Pagination dots -->
+    <div class="swiper-pagination"></div>
+</div>
+<script src="https://unpkg.com/swiper@8/swiper-bundle.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
+/* styles.css */
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f0f0f0;
+}
+
+.slider-container {
+    position: relative;
+    width: 80%;
+    max-width: 600px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.swipe {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+}
+
+.swiper-slide {
+    min-width: 100%;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.swiper-slide.active {
+    opacity: 1;
+}
+
+.prev,
+.next {
+    position: absolute;
+    top: 50%;
+    padding: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 1;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.5);
+    border: none;
+}
+
+.prev {
+    left: 10px;
+}
+
+.next {
+    right: 10px;
+}
+
+.current-image-indicator {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 18px;
+}
+// script.js
+document.addEventListener('DOMContentLoaded', () => {
+    const slides = document.querySelectorAll('.swiper-slide');
+    const prevBtn = document.querySelector('.prev');
+    const nextBtn = document.querySelector('.next');
+    const indicator = document.querySelector('.current-image-indicator');
+
+    let currentSlideIndex = 0;
+
+    // Функция для показа активного слайда
+    function showSlide(index) {
+        slides.forEach(slide => slide.classList.remove('active'));
+        slides[index].classList.add('active');
+        updateIndicator(index);
+    }
+
+    // Обновляем индикатор текущего изображения
+    function updateIndicator(index) {
+        indicator.textContent = `Изображение ${index + 1} из ${slides.length}`;
+    }
+
+    // Переход на следующий слайд
+    function goNext() {
+        currentSlideIndex++;
+        if (currentSlideIndex >= slides.length) currentSlideIndex = 0;
+        showSlide(currentSlideIndex);
+    }
+
+    // Переход на предыдущий слайд
+    function goPrev() {
+        currentSlideIndex--;
+        if (currentSlideIndex < 0) currentSlideIndex = slides.length - 1;
+        showSlide(currentSlideIndex);
+    }
+
+    // Назначаем обработчики событий для кнопок
+    nextBtn.addEventListener('click', goNext);
+    prevBtn.addEventListener('click', goPrev);
+
+    // Изначально показываем первый слайд
+    showSlide(currentSlideIndex);
+});
